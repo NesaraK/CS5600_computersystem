@@ -1,0 +1,31 @@
+
+would you return the result back to the program that spawned the child process?
+
+Answer: the child can return the values to the parent using pipes. Pipes are bydirectional communicational channels through which the parent and the child can communicate.
+
+The pipe can be created using the command pipe(fd), where "fd" is defined as int fd[2]. it is an array of integers used as a file  descriptor one for the input and one for the output.
+
+the following code segment explains the logic of communication between the parent and child:
+
+int main(){
+	int pid;
+	int fd[2];
+	pipe(fd); // to initialise the pipe and the file descryptor
+	pid = fork();
+	
+	if(pid == 0){
+		//this is a child process
+		close(fd[0]); //here we are using only child to return the value to the parent hence closing the right descryptor
+		write(fd[1], return_data, size_of_data);//here return data contains the data to be returned to the process and 
+size is the nnumber of bytes.
+		return;
+	}else{
+		//this is the parent process
+		close(fd[1]); //here parent is only reading the data hence closing the right descryptor
+		read(fd[0], buffer, size);//reading the data from the child
+	}
+	
+	
+}
+
+This is how the child can send the data to the parent and vice-versa. 
